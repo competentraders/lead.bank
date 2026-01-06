@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard | Lead Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --lead-navy: #061227;
+            --lead-mint: #00d395;
+            --bg-gray: #f4f7f9;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-gray); max-width: 500px; margin: 0 auto; min-height: 100vh; color: var(--lead-navy); }
+
+        /* --- Header & Nav --- */
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .user-profile { display: flex; align-items: center; gap: 8px; }
+        .user-name { font-weight: 700; font-size: 16px; }
+        .verify-badge { color: #3b82f6; font-size: 14px; }
+        
+        .hamburger { font-size: 22px; cursor: pointer; color: var(--lead-navy); }
+
+        /* --- Sidebar Menu --- */
+        .sidebar {
+            position: fixed; top: 0; right: -100%; width: 80%; height: 100%;
+            background: var(--lead-navy); z-index: 1000; transition: 0.4s;
+            padding: 40px 20px; color: white;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; z-index: 999;
+        }
+        .menu-list { list-style: none; margin-top: 30px; }
+        .menu-item { 
+            padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 15px; text-decoration: none; color: white;
+            font-size: 16px; font-weight: 500;
+        }
+        .menu-item i { color: var(--lead-mint); width: 25px; }
+
+        /* --- Dashboard Body --- */
+        .main-content { padding: 20px; }
+
+        .balance-card {
+            background: var(--lead-navy);
+            padding: 30px 25px;
+            border-radius: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(6, 18, 39, 0.2);
+            margin-bottom: 25px;
+        }
+        .balance-card::after {
+            content: ""; position: absolute; top: -50px; right: -50px;
+            width: 150px; height: 150px; background: rgba(0, 211, 149, 0.1); border-radius: 50%;
+        }
+
+        .balance-label { font-size: 13px; opacity: 0.8; margin-bottom: 8px; display: block; }
+        .balance-amount { font-size: 36px; font-weight: 800; display: flex; align-items: baseline; }
+        .balance-amount span { font-size: 18px; margin-right: 4px; opacity: 0.9; }
+
+        /* --- Quick Actions --- */
+        .actions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+        .action-btn {
+            background: white; padding: 15px 10px; border-radius: 16px;
+            text-align: center; text-decoration: none; color: var(--lead-navy);
+            font-size: 12px; font-weight: 700; border: 1px solid #e2e8f0;
+        }
+        .action-btn i { display: block; font-size: 20px; color: var(--lead-mint); margin-bottom: 8px; }
+
+        /* --- Transactions --- */
+        .section-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; display: flex; justify-content: space-between; }
+        .section-title a { font-size: 13px; color: var(--lead-mint); text-decoration: none; }
+
+        .transaction-list { background: white; border-radius: 20px; padding: 10px; }
+        .transaction-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 10px; border-bottom: 1px solid #f1f5f9;
+        }
+        .tx-left { display: flex; gap: 12px; align-items: center; }
+        .tx-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .tx-info h4 { font-size: 14px; margin-bottom: 2px; }
+        .tx-info p { font-size: 11px; color: #94a3b8; }
+        .tx-amount { font-weight: 700; font-size: 14px; }
+        .amt-pos { color: var(--lead-mint); }
+        .amt-neg { color: #ff4d4d; }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <h2 style="color: var(--lead-mint); margin-bottom: 20px;">Menu</h2>
+        <div class="menu-list">
+            <a href="withdraw.html" class="menu-item"><i class="fas fa-university"></i> Withdraw</a>
+            <a href="deposit.html" class="menu-item"><i class="fas fa-plus-circle"></i> Deposit</a>
+            <a href="transfer.html" class="menu-item"><i class="fas fa-exchange-alt"></i> Transfer</a>
+            <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i> Settings</a>
+            <a href="link-bank.html" class="menu-item"><i class="fas fa-link"></i> Add Bank Account</a>
+            <a href="lead.bank.login.html" class="menu-item" style="margin-top: 50px; color: #ff4d4d;"><i class="fas fa-sign-out-alt"></i> Log out</a>
+        </div>
+    </div>
+
+    <header>
+        <div class="user-profile">
+            <span class="user-name">Alex Moreno</span>
+            <i class="fas fa-check-circle verify-badge"></i>
+        </div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="balance-card">
+            <span class="balance-label">Available Balance</span>
+            <div class="balance-amount">
+                <span>$</span><div id="balanceDisplay">0.00</div>
+            </div>
+            <p style="font-size: 10px; opacity: 0.6; margin-top: 15px;">Account No: 8820 **** **** 1092</p>
+        </div>
+
+        <div class="actions-grid">
+            <a href="deposit.html" class="action-btn"><i class="fas fa-arrow-down"></i>Deposit</a>
+            <a href="transfer.html" class="action-btn"><i class="fas fa-paper-plane"></i>Transfer</a>
+            <a href="withdraw.html" class="action-btn"><i class="fas fa-wallet"></i>Withdraw</a>
+        </div>
+
+        <div class="section-title">
+            Transactions
+            <a href="#">See all</a>
+        </div>
+
+        <div class="transaction-list" id="txContainer">
+            <div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 13px;">
+                No recent transactions
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menu Toggle
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').style.display = 
+                document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none';
+        }
+
+        // Real-time Balance Engine
+        function loadDashboard() {
+            // Initialize balance if not set
+            if (!localStorage.getItem('walletBalance')) {
+                localStorage.setItem('walletBalance', '0');
+            }
+
+            // Display Balance with commas
+            const balance = parseFloat(localStorage.getItem('walletBalance'));
+            document.getElementById('balanceDisplay').innerText = balance.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+            // Load Transactions
+            const txs = JSON.parse(localStorage.getItem('transactions')) || [];
+            const container = document.getElementById('txContainer');
+            
+            if(txs.length > 0) {
+                container.innerHTML = '';
+                txs.slice().reverse().forEach(tx => {
+                    const isCredit = tx.type === 'Deposit';
+                    const html = `
+                        <div class="transaction-item">
+                            <div class="tx-left">
+                                <div class="tx-icon" style="background: ${isCredit ? '#e6fbf5' : '#fff1f1'}; color: ${isCredit ? '#00d395' : '#ff4d4d'};">
+                                    <i class="fas ${isCredit ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                                </div>
+                                <div class="tx-info">
+                                    <h4>${tx.title}</h4>
+                                    <p>${tx.date}</p>
+                                </div>
+                            </div>
+                            <div class="tx-amount ${isCredit ? 'amt-pos' : 'amt-neg'}">
+                                ${isCredit ? '+' : '-'}$${parseFloat(tx.amount).toLocaleString()}
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += html;
+                });
+            }
+        }
+
+        // Run on load
+        window.onload = loadDashboard;
+    </script>
+</body>
+</html>

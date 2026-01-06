@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard | Lead Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --lead-navy: #061227;
+            --lead-mint: #00d395;
+            --bg-gray: #f4f7f9;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: var(--bg-gray); max-width: 500px; margin: 0 auto; min-height: 100vh; color: var(--lead-navy); }
+
+        /* Navigation */
+        header {
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
+        }
+        .user-info { display: flex; align-items: center; gap: 6px; }
+        .v-badge { color: #3b82f6; font-size: 14px; }
+        
+        /* Sidebar */
+        #sidebar {
+            position: fixed; top: 0; right: -100%; width: 280px; height: 100%;
+            background: var(--lead-navy); z-index: 1000; transition: 0.3s; padding: 40px 20px;
+        }
+        #sidebar.active { right: 0; }
+        .menu-link { 
+            display: flex; align-items: center; gap: 15px; padding: 18px 0; 
+            color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .menu-link i { color: var(--lead-mint); width: 20px; }
+
+        /* Main Content */
+        .content { padding: 20px; }
+        .card {
+            background: var(--lead-navy); padding: 30px; border-radius: 25px;
+            color: #fff; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .bal-label { font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+        .bal-val { font-size: 38px; font-weight: 800; margin: 10px 0; }
+
+        .btn-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
+        .action-btn {
+            background: #fff; padding: 15px 5px; border-radius: 15px; border: 1px solid #e2e8f0;
+            text-align: center; text-decoration: none; color: var(--lead-navy); font-size: 11px; font-weight: 700;
+        }
+        .action-btn i { display: block; font-size: 18px; color: var(--lead-mint); margin-bottom: 8px; }
+
+        .tx-list { background: #fff; border-radius: 20px; padding: 5px; }
+        .tx-item { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #f1f5f9; }
+        .tx-title { font-size: 14px; font-weight: 600; }
+        .tx-date { font-size: 11px; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <div style="text-align:right; color:#fff; font-size:24px; cursor:pointer" onclick="toggleMenu()">×</div>
+        <a href="withdraw.html" class="menu-link"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="deposit.html" class="menu-link"><i class="fas fa-university"></i> Deposit</a>
+        <a href="transfer.html" class="menu-link"><i class="fas fa-exchange-alt"></i> Transfer</a>
+        <a href="settings.html" class="menu-link"><i class="fas fa-cog"></i> Settings</a>
+        <a href="link-bank.html" class="menu-link"><i class="fas fa-plus"></i> Add Bank Account</a>
+        <a href="lead.bank.login.html" class="menu-link" style="color: #ff4d4d; margin-top: 40px;"><i class="fas fa-power-off"></i> Log out</a>
+    </div>
+
+    <header>
+        <div class="user-info">
+            <span style="font-weight:700">Alex Moreno</span>
+            <i class="fas fa-check-circle v-badge"></i>
+        </div>
+        <i class="fas fa-bars" style="font-size:20px; cursor:pointer" onclick="toggleMenu()"></i>
+    </header>
+
+    <div class="content">
+        <div class="card">
+            <div class="bal-label">Total Account Balance</div>
+            <div class="bal-val" id="mainBalance">$0.00</div>
+            <div style="font-size:11px; opacity:0.5">Lead Bank Checking ...1092</div>
+        </div>
+
+        <div class="btn-grid">
+            <a href="deposit.html" class="action-btn"><i class="fas fa-arrow-down"></i>Deposit</a>
+            <a href="transfer.html" class="action-btn"><i class="fas fa-paper-plane"></i>Transfer</a>
+            <a href="withdraw.html" class="action-btn"><i class="fas fa-wallet"></i>Withdraw</a>
+        </div>
+
+        <h3 style="margin-bottom:15px">Recent Activity</h3>
+        <div class="tx-list" id="txHistory">
+            <div style="padding:40px; text-align:center; color:#94a3b8">No transactions yet</div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // INITIALIZE AND DISPLAY DATA
+        window.onload = function() {
+            // 1. Force initialize balance if empty
+            if (localStorage.getItem('walletBalance') === null) {
+                localStorage.setItem('walletBalance', '0');
+            }
+
+            // 2. Fetch and format balance
+            const rawBal = localStorage.getItem('walletBalance');
+            const formattedBal = parseFloat(rawBal).toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+            });
+            document.getElementById('mainBalance').innerText = formattedBal;
+
+            // 3. Load Transactions
+            const txs = JSON.parse(localStorage.getItem('transactions')) || [];
+            const container = document.getElementById('txHistory');
+
+            if (txs.length > 0) {
+                container.innerHTML = '';
+                txs.slice().reverse().forEach(tx => {
+                    const color = (tx.type === 'Deposit') ? '#00d395' : '#ff4d4d';
+                    const prefix = (tx.type === 'Deposit') ? '+' : '-';
+                    container.innerHTML += `
+                        <div class="tx-item">
+                            <div>
+                                <div class="tx-title">${tx.title}</div>
+                                <div class="tx-date">${tx.date}</div>
+                            </div>
+                            <div style="font-weight:700; color:${color}">${prefix}$${parseFloat(tx.amount).toLocaleString()}</div>
+                        </div>
+                    `;
+                });
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Bank | The Bank for Builders and Innovators</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --lead-navy: #061227;
+            --lead-mint: #00d395; /* Official Lead Bank Mint */
+            --lead-gray: #f9fafb;
+            --text-dark: #111827;
+            --text-light: #6b7280;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #fff; color: var(--text-dark); line-height: 1.5; }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo { font-size: 22px; font-weight: 800; color: var(--lead-navy); letter-spacing: -1px; }
+        .logo span { color: var(--lead-mint); }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { text-decoration: none; color: var(--text-dark); font-size: 14px; font-weight: 600; }
+
+        .nav-actions { display: flex; gap: 15px; align-items: center; }
+        .btn-login { color: var(--lead-navy); text-decoration: none; font-weight: 600; font-size: 14px; }
+        .btn-get-started { 
+            background: var(--lead-navy); color: white; padding: 10px 20px; 
+            border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 5% 140px;
+            background: radial-gradient(circle at top right, #f0fdf4 0%, #ffffff 50%);
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 { font-size: clamp(40px, 6vw, 72px); color: var(--lead-navy); letter-spacing: -2px; line-height: 1.1; margin-bottom: 24px; }
+        .hero p { max-width: 700px; margin: 0 auto 40px; color: var(--text-light); font-size: 18px; }
+
+        /* Trust/Awards Section */
+        .awards {
+            padding: 40px 5%;
+            background: var(--bg-gray);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            opacity: 0.6;
+        }
+        .awards img, .award-placeholder { height: 25px; font-weight: 700; color: #9ca3af; }
+
+        /* Solutions Grid */
+        .solutions { padding: 100px 5%; background: var(--lead-navy); color: white; }
+        .section-header { margin-bottom: 60px; }
+        .section-header h2 { font-size: 40px; margin-bottom: 10px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .card { 
+            background: rgba(255,255,255,0.03); padding: 40px; border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
+        }
+        .card:hover { background: rgba(255,255,255,0.06); }
+        .card i { color: var(--lead-mint); font-size: 24px; margin-bottom: 20px; display: block; }
+        .card h3 { font-size: 22px; margin-bottom: 15px; }
+        .card p { color: #94a3b8; font-size: 15px; }
+
+        /* Footer */
+        footer { padding: 80px 5% 40px; background: #fff; border-top: 1px solid #eee; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+        .footer-col h4 { margin-bottom: 20px; font-size: 14px; text-transform: uppercase; color: #9ca3af; }
+        .footer-col a { display: block; margin-bottom: 12px; text-decoration: none; color: var(--text-light); font-size: 14px; }
+
+        .compliance { font-size: 12px; color: #9ca3af; border-top: 1px solid #eee; padding-top: 30px; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .hero h1 { font-size: 42px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">LEAD<span>.</span>BANK</div>
+        <div class="nav-links">
+            <a href="https://www.lead.bank/solutions/business" target="_blank">Business</a>
+            <a href="https://www.lead.bank/solutions/personal" target="_blank">Personal</a>
+            <a href="https://www.lead.bank/solutions/baas" target="_blank">BaaS</a>
+            <a href="https://www.lead.bank/about-us" target="_blank">About</a>
+        </div>
+        <div class="nav-actions">
+            <a href="login.html" class="btn-login">Login</a>
+            <a href="register.html" class="btn-get-started">Open Account</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <span class="badge">A 2025 CNBC Disruptor 50 Company</span>
+        <h1>We are building the bank we want to see in the world.</h1>
+        <p>Lead Bank is the financial foundation for innovators. We combine regulatory expertise with modern technology to move money, issue loans, and scale your business.</p>
+        <div style="display: flex; justify-content: center; gap: 20px;">
+            <a href="#" class="btn-get-started" style="padding: 16px 32px; font-size: 16px;">Contact Our Team</a>
+            <a href="#" class="btn-login" style="padding: 16px 32px; font-size: 16px; border: 1px solid var(--lead-navy); border-radius: 6px;">Explore BaaS</a>
+        </div>
+    </header>
+
+    <section class="awards">
+        <div class="award-placeholder">FORBES FINTECH 50</div>
+        <div class="award-placeholder">CNBC DISRUPTOR 50</div>
+        <div class="award-placeholder">WORLD'S TOP FINTECH 2026</div>
+        <div class="award-placeholder">BEST BANK TO WORK FOR</div>
+    </section>
+
+    <section class="solutions">
+        <div class="container">
+            <div class="section-header">
+                <h2>Scalable solutions for builders.</h2>
+                <p style="color: #94a3b8;">Everything you need to launch and grow financial products.</p>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <i class="fas fa-microchip"></i>
+                    <h3>Banking-as-a-Service</h3>
+                    <p>Integrate accounts, transfers, and cards into your product using our industry-leading API platform.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Commercial Banking</h3>
+                    <p>High-touch treasury, lending, and liquidity solutions designed for venture-backed startups and enterprises.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>Personal Banking</h3>
+                    <p>Secure, interest-bearing accounts for individuals who value a community-focused bank with modern tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+            <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 20px;">LEAD<span>.</span>BANK</div>
+                <p style="color: var(--text-light); font-size: 14px;">Lead Bank is a Missouri-chartered, FDIC-insured commercial bank headquartered in Kansas City.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Solutions</h4>
+                <a href="https://www.lead.bank/solutions/lending" target="_blank">Lending</a>
+                <a href="https://www.lead.bank/solutions/transfers" target="_blank">Transfers</a>
+                <a href="https://www.lead.bank/solutions/cards" target="_blank">Cards</a>
+                <a href="https://www.lead.bank/solutions/accounts" target="_blank">Accounts</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="https://www.lead.bank/about-us" target="_blank">About Us</a>
+                <a href="https://www.lead.bank/about-us#leadership" target="_blank">Leadership</a>
+                <a href="https://www.lead.bank/careers" target="_blank">Careers</a>
+                <a href="https://www.lead.bank/blog" target="_blank">Blog</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="https://www.lead.bank/privacy-policy" target="_blank">Privacy Policy</a>
+                <a href="https://www.lead.bank/terms-of-service" target="_blank">Terms of Service</a>
+                <a href="https://www.lead.bank/ada-compliance" target="_blank">ADA Compliance</a>
+                <a href="https://www.lead.bank/security" target="_blank">Security</a>
+            </div>
+        </div>
+
+        <div class="compliance">
+            <p>© 2026 Lead Bank. All rights reserved. Member FDIC. Equal Housing Lender. NMLS #411132.</p>
+            <p style="margin-top: 10px;">Lead Bank is a trade name of Lead Bank, a Missouri-chartered bank.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
+

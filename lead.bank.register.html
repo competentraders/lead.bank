@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Register | Lead Bank Mobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --lead-navy: #061227;
+            --lead-mint: #00d395;
+            --error-red: #ff4d4d;
+            --bg-gray: #f8fafc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: #fff; max-width: 500px; margin: 0 auto; color: var(--lead-navy); padding-bottom: 40px; }
+
+        nav { padding: 20px; text-align: center; border-bottom: 1px solid #eee; position: sticky; top: 0; background: #fff; z-index: 100; }
+        .logo { font-size: 20px; font-weight: 800; text-decoration: none; color: var(--lead-navy); }
+        .logo span { color: var(--lead-mint); }
+
+        .container { padding: 25px; }
+        h2 { font-size: 24px; margin-bottom: 5px; }
+        p.sub { font-size: 14px; color: #718096; margin-bottom: 25px; }
+
+        .form-group { margin-bottom: 18px; position: relative; }
+        label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; color: #4a5568; }
+
+        input, select {
+            width: 100%; padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 10px;
+            font-size: 16px; outline: none; background: var(--bg-gray);
+        }
+        input:focus { border-color: var(--lead-mint); background: #fff; }
+
+        .toggle-pass {
+            position: absolute; right: 15px; top: 38px;
+            color: #a0aec0; cursor: pointer; font-size: 18px;
+        }
+
+        .btn-submit {
+            width: 100%; background: var(--lead-navy); color: white; padding: 18px;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
+            margin-top: 20px; cursor: pointer;
+        }
+
+        .error-msg { color: var(--error-red); font-size: 12px; margin-top: 5px; display: none; }
+
+        /* --- POPUP STYLES --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(6, 18, 39, 0.8);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1000; padding: 20px;
+        }
+
+        .modal-card {
+            background: white; width: 100%; max-width: 350px;
+            padding: 40px 20px; border-radius: 20px; text-align: center;
+            animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .bird-icon {
+            font-size: 50px; color: var(--lead-mint); margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .modal-card h3 { font-size: 18px; margin-bottom: 10px; color: var(--lead-navy); }
+        .modal-card p { font-size: 14px; color: #718096; line-height: 1.5; margin-bottom: 25px; }
+
+        .btn-close {
+            background: var(--lead-navy); color: white; padding: 12px 30px;
+            border: none; border-radius: 8px; font-weight: 600; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="modal-overlay" id="locationModal">
+        <div class="modal-card">
+            <div class="bird-icon">
+                <i class="fas fa-dove"></i> </div>
+            <h3>Location Restricted</h3>
+            <p>Please, you can't register in your location. Kindly contact customer service for further assistance.</p>
+            <button class="btn-close" onclick="closeModal()">Understood</button>
+        </div>
+    </div>
+
+    <nav><a href="#" class="logo">LEAD<span>.</span>BANK</a></nav>
+
+    <div class="container">
+        <h2>Create Account</h2>
+        <p class="sub">Please provide your legal details below.</p>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="fname" placeholder="john" required>
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="lname" placeholder="doe" required>
+            </div>
+            <div class="form-group">
+                <label>Other Name</label>
+                <input type="text" id="oname" placeholder="Optional">
+            </div>
+            <div class="form-group">
+                <label>User Name</label>
+                <input type="text" id="uname" placeholder="doe66" required>
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="doe@example.com" required>
+            </div>
+            <div class="form-group">
+                <label>Confirm Email</label>
+                <input type="email" id="cemail" placeholder="doe@example.com" required>
+                <span id="emailMatchError" class="error-msg">Emails do not match</span>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="pass" required>
+                <i class="fas fa-eye toggle-pass" onclick="toggleVisibility('pass', this)"></i>
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" id="cpass" required>
+                <i class="fas fa-eye toggle-pass" onclick="toggleVisibility('cpass', this)"></i>
+                <span id="passMatchError" class="error-msg">Passwords do not match</span>
+            </div>
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" id="dob" required>
+            </div>
+            <div class="form-group">
+                <label>Nationality (Europe Only)</label>
+                <select id="nationality" required>
+                    <option value="">Select Country</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="FR">France</option>
+                    <option value="DE">Germany</option>
+                    <option value="IT">Italy</option>
+                    <option value="ES">Spain</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Register Account</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleVisibility(id, el) {
+            const field = document.getElementById(id);
+            if (field.type === "password") {
+                field.type = "text";
+                el.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                field.type = "password";
+                el.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('locationModal').style.display = 'none';
+        }
+
+        const form = document.getElementById('registerForm');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Perform basic validation first
+            const email = document.getElementById('email').value;
+            const cemail = document.getElementById('cemail').value;
+            const pass = document.getElementById('pass').value;
+            const cpass = document.getElementById('cpass').value;
+
+            if (email !== cemail) {
+                document.getElementById('emailMatchError').style.display = 'block';
+                return;
+            }
+            if (pass !== cpass) {
+                document.getElementById('passMatchError').style.display = 'block';
+                return;
+            }
+
+            // TRIGGER THE BIRD POPUP AS REQUESTED
+            document.getElementById('locationModal').style.display = 'flex';
+        });
+    </script>
+</body>
+</html>

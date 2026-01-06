@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login | Lead Bank Mobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --lead-navy: #061227;
+            --lead-mint: #00d395;
+            --error-red: #ff4d4d;
+            --bg-gray: #f8fafc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: #fff; max-width: 500px; margin: 0 auto; color: var(--lead-navy); }
+
+        nav { 
+            padding: 20px; 
+            text-align: center; 
+            border-bottom: 1px solid #eee; 
+            background: #fff;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .logo-text { 
+            font-size: 22px; 
+            font-weight: 800; 
+            color: var(--lead-navy); 
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-dot { color: var(--lead-mint); }
+
+        .container { padding: 40px 25px; }
+        h2 { font-size: 24px; margin-bottom: 8px; letter-spacing: -0.5px; }
+        p.sub { font-size: 14px; color: #718096; margin-bottom: 30px; }
+
+        .form-group { margin-bottom: 20px; position: relative; }
+        label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; color: #4a5568; }
+
+        input {
+            width: 100%; padding: 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;
+            font-size: 16px; outline: none; background: var(--bg-gray);
+        }
+        input:focus { border-color: var(--lead-mint); background: #fff; }
+
+        .toggle-pass {
+            position: absolute; right: 15px; top: 40px;
+            color: #a0aec0; cursor: pointer; font-size: 18px;
+        }
+
+        .error-box {
+            background: #fff5f5; color: var(--error-red); padding: 12px;
+            border-radius: 8px; font-size: 13px; margin-bottom: 20px;
+            display: none; border: 1px solid #fed7d7;
+        }
+
+        .btn-login {
+            width: 100%; background: var(--lead-navy); color: white; padding: 18px;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
+            margin-top: 10px; cursor: pointer;
+        }
+
+        .footer-links { text-align: center; margin-top: 30px; font-size: 14px; color: #718096; }
+        .footer-links a { color: var(--lead-mint); text-decoration: none; font-weight: 700; }
+
+        #loader {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9); z-index: 1000;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3; border-top: 4px solid var(--lead-mint);
+            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; font-weight: 600;">Securely logging in...</p>
+    </div>
+
+    <nav>
+        <div class="logo-container">
+            <div class="logo-text">LEAD<span class="logo-dot">.</span>BANK</div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Welcome back</h2>
+        <p class="sub">Log in to manage your digital assets.</p>
+
+        <div id="loginError" class="error-box">
+            <i class="fas fa-exclamation-circle"></i> Invalid email or password.
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="loginUser" placeholder="" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPass" placeholder="" required>
+                <i class="fas fa-eye toggle-pass" onclick="toggleVisibility()"></i>
+            </div>
+
+            <button type="submit" class="btn-login">Sign In</button>
+        </form>
+
+        <div class="footer-links">
+            Don't have an account? <a href="lead.bank.register.html">Sign Up</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleVisibility() {
+            const passField = document.getElementById('loginPass');
+            const icon = document.querySelector('.toggle-pass');
+            if (passField.type === "password") {
+                passField.type = "text";
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passField.type = "password";
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        const loginForm = document.getElementById('loginForm');
+        
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('loginUser').value;
+            const passInput = document.getElementById('loginPass').value;
+            const errorBox = document.getElementById('loginError');
+            const loader = document.getElementById('loader');
+
+            // Hardcoded Credentials based on your plan
+            const targetEmail = "alexmorenolina@gmail.com";
+            const targetPass = "Alexmoreno";
+
+            // Validation Logic
+            if (emailInput === targetEmail && passInput === targetPass) {
+                errorBox.style.display = 'none';
+                loader.style.display = 'flex';
+
+                // Redirect to the custom dashboard URL
+                setTimeout(() => {
+                    window.location.href = "alexmoreno.lead.bank.dashboard.html"; 
+                }, 2000);
+
+            } else {
+                errorBox.style.display = 'block';
+                document.getElementById('loginPass').value = ''; 
+            }
+        });
+    </script>
+</body>
+</html>

